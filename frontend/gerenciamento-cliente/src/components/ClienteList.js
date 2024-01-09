@@ -1,10 +1,13 @@
 import React from 'react';
+import './ClienteList.css';
 
 const ClienteList = ({ clientes }) => (
-  <ul>
+  <ul className='ul-center'>
     {clientes.map((cliente) => (
-      <li key={cliente.id}>
-        {cliente.nome} - {cliente.email} - {cliente.telefone}
+      <li key={cliente.id} className='li-center'>
+        <span>{cliente.nome}</span> -
+        <span>{cliente.email}</span> -
+        <span>{cliente.telefone}</span> 
       </li>
     ))}
   </ul>

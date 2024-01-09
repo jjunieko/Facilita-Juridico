@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './ClienteFilter.css';
 
 const ClienteFilter = ({ onFilter }) => {
   const [filtroNome, setFiltroNome] = useState('');
@@ -8,14 +9,15 @@ const ClienteFilter = ({ onFilter }) => {
   };
 
   return (
-    <div>
+    <div className='content'>
       <input
+        className='input-field'
         type="text"
         placeholder="Filtrar por nome"
         value={filtroNome}
         onChange={(e) => setFiltroNome(e.target.value)}
       />
-      <button onClick={handleFilter}>Filtrar</button>
+      <button className='submit-button-filter' onClick={handleFilter}>Filtrar</button>
     </div>
   );
 };

@@ -1,0 +1,9 @@
+.ul-center {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.li-center {
+}
