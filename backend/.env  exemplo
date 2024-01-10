@@ -1,0 +1,4 @@
+  USER_KEY = 'postgres',
+  HOST = 'localhost',
+  DATABASE ='postgres',
+  PASSWORD = '123456',

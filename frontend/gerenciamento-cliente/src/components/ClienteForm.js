@@ -3,7 +3,13 @@ import InputMask from 'react-input-mask';
 import './ClienteForm.css';
 
 const ClienteForm = ({ onSubmit }) => {
-    const [novoCliente, setNovoCliente] = useState({ nome: '', email: '', telefone: '' });
+    const [novoCliente, setNovoCliente] = useState({
+        nome: '',
+        email: '',
+        telefone: '',
+        coordenada_x: '',
+        coordenada_y: '',
+    });
 
     const handleInputChange = (field, value) => {
         setNovoCliente({ ...novoCliente, [field]: value });
@@ -11,7 +17,13 @@ const ClienteForm = ({ onSubmit }) => {
 
     const handleSubmit = () => {
         onSubmit(novoCliente);
-        setNovoCliente({ nome: '', email: '', telefone: '' });
+        setNovoCliente({
+            nome: '',
+            email: '',
+            telefone: '',
+            coordenada_x: '',
+            coordenada_y: '',
+        });
     };
 
     return (
@@ -32,13 +44,27 @@ const ClienteForm = ({ onSubmit }) => {
                 onChange={(e) => handleInputChange('email', e.target.value)}
             />
             <InputMask
-                mask="(999)9999-99999"
+                mask="(999)99999-9999"
                 className="input-field"
                 maskChar=""
                 type="text"
                 placeholder="Telefone"
                 value={novoCliente.telefone}
                 onChange={(e) => handleInputChange('telefone', e.target.value)}
+            />
+            <input
+                className="input-field"
+                type="text"
+                placeholder="Coordenada X"
+                value={novoCliente.coordenada_x}
+                onChange={(e) => handleInputChange('coordenada_x', e.target.value)}
+            />
+            <input
+                className="input-field"
+                type="text"
+                placeholder="Coordenada Y"
+                value={novoCliente.coordenada_y}
+                onChange={(e) => handleInputChange('coordenada_y', e.target.value)}
             />
             <button onClick={handleSubmit} className='submit-button'>Cadastrar</button>
         </div>
