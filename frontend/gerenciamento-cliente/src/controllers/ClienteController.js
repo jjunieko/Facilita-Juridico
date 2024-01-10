@@ -6,6 +6,7 @@ import ClienteForm from '../components/ClienteForm';
 import { GoogleMap, LoadScript, DirectionsRenderer, Marker } from '@react-google-maps/api';
 import './style.css';
 
+
 const ClienteController = () => {
   const urlBase = "http://localhost:3000/"
   const [clientes, setClientes] = useState([]);
@@ -13,6 +14,8 @@ const ClienteController = () => {
   const [directions, setDirections] = useState(null);
   const [modalAberta, setModalAberta] = useState(false);
   const [distanciaTotal, setDistanciaTotal] = useState(false);
+  const keyMaps = process.env.KEY_MAPS || "AIzaSyApIaX_lQPURhdkUCqcj41e9No68KiLcWE";
+  
 
   useEffect(() => {
     const carregarClientes = async () => {
@@ -53,11 +56,6 @@ const ClienteController = () => {
       const response = await axios.post('http://localhost:3000/rota', { clientes });
       setRota(response.data.rotaOtimizada);
 
-      rota.sort((a, b) => {
-        const distanciaA = calcularDistancia(-19.9025359, -44.046451, a.coordenada_x, a.coordenada_y);
-        const distanciaB = calcularDistancia(-19.9025359, -44.046451, b.coordenada_x, b.coordenada_y);
-        return distanciaA - distanciaB;
-      });
 
       // Converter a distância para quilômetros
       const distanciaFormatada = (response.data.distanciaTotal / 100).toFixed(4);
@@ -95,8 +93,13 @@ const ClienteController = () => {
   }
 
   rota.sort((a, b) => {
-    const distanciaA = calcularDistancia(-19.9025359, -44.046451, a.coordenada_x, a.coordenada_y);
-    const distanciaB = calcularDistancia(-19.9025359, -44.046451, b.coordenada_x, b.coordenada_y);
+    //simualado empresa em BH
+    // const distanciaA = calcularDistancia(-19.9025359, -44.046451, a.coordenada_x, a.coordenada_y);
+    // const distanciaB = calcularDistancia(-19.9025359, -44.046451, b.coordenada_x, b.coordenada_y);
+
+    //simulação do teste
+    const distanciaA = calcularDistancia(0, 0, a.coordenada_x, a.coordenada_y);
+    const distanciaB = calcularDistancia(0, 0, b.coordenada_x, b.coordenada_y);
     return distanciaA - distanciaB;
   });
 
@@ -118,7 +121,7 @@ const ClienteController = () => {
       {/* Formulário de novo cliente */}
       <ClienteForm onSubmit={cadastrarCliente} />
 
-      <button onClick={calcularRota} className='button'>Calcular Rota Otimizada</button>
+      <button onClick={calcularRota} className='button-calcular'>Calcular Rota Otimizada</button>
 
       {/* Modal para mostrar a ordem de visitação dos clientes */}
       {modalAberta && (
@@ -129,7 +132,7 @@ const ClienteController = () => {
             {rota.map((cliente, index) => (
               <li key={cliente.id}>{`${index + 1}.
                ${cliente.nome} - 
-                Distância até a empresa: ${calcularDistancia(-19.9025359, -44.046451, cliente.coordenada_x, cliente.coordenada_y).toFixed(2)} km`}
+                Distância até a empresa: ${calcularDistancia(0, 0, cliente.coordenada_x, cliente.coordenada_y).toFixed(2)} km`}
               </li>
             ))}
           </ul>
@@ -140,7 +143,7 @@ const ClienteController = () => {
 
 
       {/* Mapa */}
-      <LoadScript googleMapsApiKey="AIzaSyApIaX_lQPURhdkUCqcj41e9No68KiLcWE">
+      <LoadScript googleMapsApiKey={keyMaps}>
         <GoogleMap
           id="google-map"
           mapContainerStyle={mapContainerStyle}
