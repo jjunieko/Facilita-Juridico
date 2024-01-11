@@ -3,7 +3,7 @@ import axios from 'axios';
 import ClienteList from '../components/ClienteList';
 import ClienteFilter from '../components/ClienteFilter';
 import ClienteForm from '../components/ClienteForm';
-import { GoogleMap, LoadScript, DirectionsRenderer, Marker } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, DirectionsRenderer, Marker, InfoWindow } from '@react-google-maps/api';
 import './style.css';
 
 
@@ -14,13 +14,15 @@ const ClienteController = () => {
   const [directions, setDirections] = useState(null);
   const [modalAberta, setModalAberta] = useState(false);
   const [distanciaTotal, setDistanciaTotal] = useState(false);
+  // const [infoWindowCliente, setInfoWindowCliente] = useState(null);
   const keyMaps = process.env.KEY_MAPS || "AIzaSyApIaX_lQPURhdkUCqcj41e9No68KiLcWE";
-  
+
 
   useEffect(() => {
     const carregarClientes = async () => {
       try {
         const response = await axios.get(`${urlBase}clientes`);
+
         setClientes(response.data);
       } catch (error) {
         console.error('Erro ao carregar clientes:', error);
@@ -29,6 +31,10 @@ const ClienteController = () => {
 
     carregarClientes();
   }, []);
+
+  useEffect(() => {
+
+  }, [clientes]);
 
 
   const filtrarClientes = async (filtroNome) => {
@@ -108,6 +114,19 @@ const ClienteController = () => {
     height: '400px',
   };
 
+  const ClienteMarker = ({ cliente }) => {
+    return (
+      <Marker
+        key={cliente.id}
+        position={{
+          lat: typeof cliente.coordenada_x === 'number' ? cliente.coordenada_x.toFixed(6) : 0,
+          lng: typeof cliente.coordenada_y === 'number' ? cliente.coordenada_y.toFixed(6) : 0,
+        }}
+        title={cliente.nome}
+      />
+    );
+  };
+
   return (
     <div>
       <h1>Gerenciamento de Clientes</h1>
@@ -147,18 +166,11 @@ const ClienteController = () => {
         <GoogleMap
           id="google-map"
           mapContainerStyle={mapContainerStyle}
-          zoom={3}
+          zoom={2}
           center={{ lat: -9.6711986, lng: -99.7670981 }}
         >
           {clientes.map((cliente) => (
-            <Marker
-              key={cliente.id}
-              position={{
-                lat: typeof cliente.coordenada_x === 'number' ? cliente.coordenada_x : 0,
-                lng: typeof cliente.coordenada_y === 'number' ? cliente.coordenada_y : 0,
-              }}
-              title={cliente.nome}
-            />
+            <ClienteMarker key={cliente.id} cliente={cliente} />
           ))}
 
           {directions && (
